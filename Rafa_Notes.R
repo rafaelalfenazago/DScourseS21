@@ -60,7 +60,8 @@ R
 ## exit R in OSCER
 ctr + d 
 
-test
+git rm [filename.txt] ## remove file from git
+git push origin master ## update git
 
 
 
