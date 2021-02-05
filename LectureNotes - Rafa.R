@@ -46,9 +46,19 @@ logout ## logout
 ## cloning folder from github to the super computer
 git clone https://github.com/rafaelalfenazago/DScourseS21.git
 
+################
+## 02/04/2021 ##
+################
 
+## copy a file to OSCER
+scp -p README.md ouecon053@schooner.oscer.ou.edu:/home/ouecon053/README_test.md
 
-
+## Do I have R installed? (at OSCER)
+which R
+## open R in OSCER
+R
+## exit R in OSCER
+ctr + d 
 
 
 
