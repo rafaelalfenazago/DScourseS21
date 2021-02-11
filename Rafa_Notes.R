@@ -78,9 +78,11 @@ cd ~/DScourseS19 #1
 git fetch upstream #2
 git merge upstream/master -m “message” #3	
 git push origin master #4
+##or
+git pull upstream master
 
 
-## Creating file
+## Creating and updating files
 git status #1
 git add [new file] PS2/* #2
 git status #3
