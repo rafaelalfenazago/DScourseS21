@@ -63,7 +63,29 @@ ctr + d
 git rm [filename.txt] ## remove file from git
 git push origin master ## update git
 
+################
+## 02/11/2021 ##
+################
 
+# changing the default .txt software (terminal and OSCER)
+git config --global core dot. editor "nano" #or vin
+
+#Adding Dr. Ransom’s folder as the upstream
+git remote add upstream [URL]
+
+#How to update github: 
+cd ~/DScourseS19 #1
+git fetch upstream #2
+git merge upstream/master -m “message” #3	
+git push origin master #4
+
+
+## Creating file
+git status #1
+git add [new file] PS2/* #2
+git status #3
+git commit -m “message” #4
+git push origin master #5
 
 
 
