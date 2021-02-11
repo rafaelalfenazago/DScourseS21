@@ -73,7 +73,7 @@ git config --global core dot. editor "nano" #or vin
 #Adding Dr. Ransom’s folder as the upstream
 git remote add upstream [URL]
 
-#How to update github: 
+#How to update yourr fork in github: 
 cd ~/DScourseS19 #1
 git fetch upstream #2
 git merge upstream/master -m “message” #3	
