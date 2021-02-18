@@ -89,9 +89,36 @@ git status #3
 git commit -m “message” #4
 git push origin master #5
 
+################
+## 02/18/2021 ##
+################
+
+## create "bin" folder
+mkdir bin
+
+#copying files to bin
+cd ~/DScourseS21/SLURM/
+cp -p *batch ~/bin/
+
+## make files readable (treat it like linux command) to the system
+chmod +x *batch ##chmod = change mode
 
 
+## Running jobs on OSCER
+ls -al *batch
+nano .bash_profile
 
+logout
+log in
+
+
+which Rbatch
+cd DScourseS21/SLURM/
+ls
+cat test.R
+nano ~/bin/Rbatch
+Rbatch test.R test.Rlog 00:00:02 rafael_zago@ou.edu
+ls -lt
 
 
 
