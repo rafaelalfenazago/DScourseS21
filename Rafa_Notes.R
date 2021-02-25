@@ -121,6 +121,55 @@ Rbatch test.R test.Rlog 00:00:02 rafael_zago@ou.edu
 ls -lt
 
 
+####################
+### 02/25/2021 #####
+####################
+
+
+usethis::edit_r_environ()
+
+
+## EXAMPLE OF USING DATAFROM FRED
+
+## use FRED API Key
+sys.getenv("FRED_API_KEY")
+
+
+library(tidyverse)
+library(fredr)
+
+## use your FRED API key
+df <- sum_api_function("FRED_series_we_want", 
+                     key=Sys.getenv("FRED_API_KEY"))
+
+## download data from FRED using API key
+df <- fredr(
+  series_id = "GNPCA",
+  observation_start = as.Date("1948-01-01"),
+  observation_end = as.Date("2020-01-01")
+)
+
+
+## ANOTHER EXAMPLE 
+install.packages("rscorecard")
+library(rscorecard)
+
+## using api key from us gov website
+sc_key(Sys.getenv("US_GOV_API_KEY"))
+
+## download some data 
+
+df <- sc_init() %>%
+  sc_filter(region ==2, ccbasic==c(21,22,23),
+  sc_select(unitid, instnm, stabbr, uods) %>%
+  sc_year("latest")%>%... ##(see when watching the class)
+  
+### archive.org
+  
+  
+
+
+
 
 
 
