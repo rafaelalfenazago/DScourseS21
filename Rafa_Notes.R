@@ -121,6 +121,73 @@ Rbatch test.R test.Rlog 00:00:02 rafael_zago@ou.edu
 ls -lt
 
 
+##################################
+### 02/23/2021 - Webscraping #####
+##################################
+
+install.packages("rvest") ## R package that takes website data 
+                          ## and organize it into an easy structure
+library(rvest)
+library(tidyverse)
+
+
+## how to donwload the website into R
+url <- "https://en.wikipedia.org/wiki/Men%27s_100_metres_world_record_progression"
+m100 <- read_html(url)
+
+
+## 1) click on "inspect" on the thing that you want to import
+## so you know what to import
+## 2) Find out the object, right click on it and "copy selector"
+
+# object I want to download:
+#mw-content-text > div.mw-parser-output > table:nth-child(8)
+
+
+m100df <- read_html(url)%>% ## download the webpage
+html_nodes("#mw-content-text > div.mw-parser-output > table:nth-child(8)") %>% ## address
+  `[[`(1) %>% ## first element of the list
+       html_table(fill=TRUE) ## transform html table into a table
+
+## OR 
+
+m100df_2 <- html_table(html_nodes(read_html(url), 
+"#mw-content-text > div.mw-parser-output > table:nth-child(8)")[[1]])
+
+
+### Trying by myself (2nd table)
+
+m100df_1972_1976 <- read_html(url)%>% ## download the webpage
+  html_nodes("#mw-content-text > div.mw-parser-output > table:nth-child(14)") %>% ## address
+  `[[`(1) %>% ## first element of the list
+  html_table(fill=TRUE) ## transform html table into a table
+
+## (3rd table)
+m100df_1977 <- read_html(url)%>% ## download the webpage
+  html_nodes("#mw-content-text > div.mw-parser-output > table:nth-child(19)") %>% ## address
+  `[[`(1) %>% ## first element of the list
+  html_table(fill=TRUE) ## transform html table into a table
+
+## How many types D. Trump lied
+## see github TrumpLies.Rmd
+
+
+
+
+install.packages("polite")
+library(polite) ## check if you can/can't webscrape some site
+
+url <- "https://en.wikipedia.org/wiki/Men%27s_100_metres_world_record_progression"
+m100 <- read_html(url)
+m100 <- scrape(bow(url))
+
+m100df <- read_html(url)%>% ## download the webpage
+  html_nodes("#mw-content-text > div.mw-parser-output > table:nth-child(8)") %>% ## address
+  `[[`(1) %>% ## first element of the list
+  html_table(fill=TRUE) ## transform html table into a table
+
+
+
 ####################
 ### 02/25/2021 #####
 ####################
