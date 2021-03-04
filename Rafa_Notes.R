@@ -192,44 +192,98 @@ m100df <- read_html(url)%>% ## download the webpage
 ### 02/25/2021 #####
 ####################
 
+install.packages("fredr")
+## API (Application Program Interface) - 
+## different applications can interact with each other
+## such as download a json file and convert it to a table in R
 
+
+install.packages("usethis")
+## put your API keys into this file so you can 
+## get it anytime you want
 usethis::edit_r_environ()
 
-
 ## EXAMPLE OF USING DATAFROM FRED
-
-## use FRED API Key
-sys.getenv("FRED_API_KEY")
-
-
 library(tidyverse)
 library(fredr)
 
-## use your FRED API key
-df <- sum_api_function("FRED_series_we_want", 
-                     key=Sys.getenv("FRED_API_KEY"))
+## use FRED API Key
+Sys.getenv("FRED_API_KEY")
 
-## download data from FRED using API key
+########################################################
+## example of how it works when using an R package    ##
+## and an API                                         ##
+##                                                    ##
+## df <- some_api_function("FRED_series_we_want",     ##
+##                     key=Sys.getenv("FRED_API_KEY"))##
+########################################################
+
+## 1) 
+## download GNP data from FRED using API key
+
 df <- fredr(
   series_id = "GNPCA",
   observation_start = as.Date("1948-01-01"),
   observation_end = as.Date("2020-01-01")
 )
 
+#### COVID example
+install.packages("dplyr")
+library(dplyr)
+install.packages("pacman")
+library(pacman)
+pacman::p_load(tidyverse, magrittr, tsibble, zoo, COVID19)
+df <- covid19(c("US"))
+df.ts.us <- as_tsibble(df, key=id, index=date)
+df.ts.us %<>% mutate(new_cases = difference(confirmed))
 
-## ANOTHER EXAMPLE 
+
+ggplot(df.ts.us, aes(date, new_cases)) + geom_hline(yintercept = 75000) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in US\n(7-day rolling average)", x = "Date") + theme_minimal()
+
+df.ts.us %<>% mutate(new_deaths = difference(deaths),
+                     CFR        = new_deaths/new_cases)
+
+ggplot(df.ts.us, aes(date, CFR)) + geom_line(aes(y=rollmean(CFR, 7, na.pad=TRUE))) + labs(y = "US Case Fatality Rate\n(7-day rolling average)", x = "Date") + theme_minimal()
+
+df.ok <- covid19(country=c("US"),level=2) %>% filter(key_alpha_2=="OK")
+df.ts <- as_tsibble(df.ok, key=id, index=date)
+df.ts %<>% mutate(new_cases = difference(confirmed))
+
+ggplot(df.ts, aes(date, new_cases)) + geom_hline(yintercept = 750) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Oklahoma\n(7-day rolling average)", x = "Date") + theme_minimal()
+ggplot(df.ts %>% filter(date>"2020-10-01"), aes(date, new_cases)) + geom_hline(yintercept = 750) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Oklahoma\n(7-day rolling average)", x = "Date") + theme_minimal()
+ggplot(df.ts %>% filter(date>"2020-12-01"), aes(date, new_cases)) + geom_hline(yintercept = 750) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Oklahoma\n(7-day rolling average)", x = "Date") + theme_minimal()
+
+df.ts %<>% mutate(new_deaths = difference(deaths),
+                  CFR        = new_deaths/new_cases)
+
+ggplot(df.ts, aes(date, CFR)) + geom_line(aes(y=rollmean(CFR, 7, na.pad=TRUE))) + labs(y = "Case Fatality Rate in Oklahoma\n(7-day rolling average)", x = "Date") + theme_minimal()
+
+# Cleveland County
+df.clev <- covid19(country=c("US"),level=3) %>% filter(administrative_area_level_2=="Oklahoma" & administrative_area_level_3=="Cleveland")
+df.ts <- as_tsibble(df.clev, key=id, index=date)
+df.ts %<>% mutate(new_cases = difference(confirmed))
+
+ggplot(df.ts, aes(date, new_cases)) + geom_hline(yintercept = 50) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Cleveland County\n(7-day rolling average)", x = "Date") + theme_minimal()
+ggplot(df.ts %>% filter(date>"2020-10-01"), aes(date, new_cases)) + geom_hline(yintercept = 50) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Cleveland County\n(7-day rolling average)", x = "Date") + theme_minimal()
+ggplot(df.ts %>% filter(date>"2020-12-01"), aes(date, new_cases)) + geom_hline(yintercept = 50) + geom_line(aes(y=rollmean(new_cases, 7, na.pad=TRUE))) + labs(y = "New Daily Cases in Cleveland County\n(7-day rolling average)", x = "Date") + theme_minimal()
+
+## 3) 
+
+## Another example
 install.packages("rscorecard")
 library(rscorecard)
+## r college scorecard package
+## https://github.com/btskinner/rscorecard
 
 ## using api key from us gov website
 sc_key(Sys.getenv("US_GOV_API_KEY"))
 
 ## download some data 
-
-df <- sc_init() %>%
-  sc_filter(region ==2, ccbasic==c(21,22,23),
-  sc_select(unitid, instnm, stabbr, uods) %>%
-  sc_year("latest")%>%... ##(see when watching the class)
+df <- sc_init() %>% 
+  sc_filter(region == 2, ccbasic == c(21,22,23), locale == 41:43) %>% 
+  sc_select(unitid, instnm, stabbr, ugds) %>% 
+  sc_year("latest") %>% 
+  sc_get()
   
 ### archive.org
   
