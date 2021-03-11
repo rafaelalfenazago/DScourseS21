@@ -286,8 +286,191 @@ df <- sc_init() %>%
   sc_get()
   
 ### archive.org
+
+##################
+##### March 4th ##
+##################
+
+# ggplot
+
+library(datasets)
+library(datasets)
+library(ggplot2)
+
+data(iris)
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) + geom_point()
+
+plen <- ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width))
+plen + geom_point()  + coord_flip() ## "+" signs add more embelishments
+
+## geom_smooth() - adds a regression line at ggplot
+
+## ggplot cheat sheet
+## https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+
+## good practices for graphs
+## https://socviz.co/gettingstarted.html
+
+install.packages("ggthemes")
+
+library("tidyverse")
+library(ggthemes)
+
+## mpg data set example
+mpg <- as_tibble(mpg)
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) 
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy), geom_point()) ##wrong syntex
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + geom_point() ## correct syntex
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + geom_jitter() ## remove those dots on the same value in the x axis
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + geom_jitter() +
+       theme_bw()  ## changing the background
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + geom_jitter() +
+       theme_minimal()  ## changing the background
+
+## 3rd dimensional visualization
+mpg
+?mpg
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy, 
+       size=as.factor(manufacturer))) + 
+       geom_jitter() +
+       theme_minimal()  ## by manufacturer, but very good use of "size"
+
+
+ggplot(data=mpg, 
+  aes(x=cty, y=hwy)) + 
+  geom_jitter(aes(color=as.factor(manufacturer))) +
+  theme_minimal()  ## by manufacturer, but still not very good 
+
+ggsave("plot_name.png") ## saving ggplot to your directory
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter(aes(color=as.factor(year))) +
+  theme_minimal()  ## by year, but still not very good 
+
+## adding a label
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_label(aes(label=as.factor(year))) +
+  theme_minimal()
+
+## other types of plots 
+
+## kernel density
+
+ggplot(data=mpg, 
+       aes(x=cty)) + 
+  geom_density() +
+  theme_minimal()
+
+## histogram
+
+ggplot(data=mpg, 
+       aes(x=cty)) + 
+  geom_histogram() +
+  theme_minimal()
+
+## bar graph
+
+ggplot(data=mpg, 
+       aes(x=cty)) + 
+  geom_bar() +
+  theme_minimal()
+
+
+## box plot
+
+ggplot(data=mpg, 
+       aes(y=cty)) + 
+  geom_boxplot() +
+  theme_minimal()
+
+ggplot(data=mpg, 
+       aes(y=cty, x=as.factor(year))) + 
+  geom_boxplot() +
+  theme_minimal()
+
+ggplot(data=mpg, 
+       aes(y=cty, x=as.factor(manufacturer))) + 
+  geom_boxplot() +
+  theme_minimal() + 
+  theme(axis.text.x = 
+          element_text(angle=45, hjust=1)) + ## change the lables on the x axis
+  labs(y = "City Fuel Economy", ## add y axis label
+       x= "Vehicle Make", 
+       caption = paste0(
+         "Number of observations:", dim(mpg[1])
+       )) ## adding number of observations in the graph
+
+
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter() +
+  theme_minimal() +
+  facet_wrap(vars(as.factor(manufacturer)),
+             ncol=4) ##  scatter plot by manufacturer
+                     ## in 4 columns
+#changing themes
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter() +
+  theme_economist() +
+  facet_wrap(vars(as.factor(year)),
+             ncol=2) ##  scatter plot by year and with the economist theme
   
-  
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter() +
+  theme_fivethirtyeight() +
+  facet_wrap(vars(as.factor(year)),
+             ncol=2)
+   
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter() +
+  theme_tufte() +
+  facet_wrap(vars(as.factor(year)),
+             ncol=2)
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_jitter() +
+  geom_rangeframe()+ ##adding the axis linking min and max for each variable
+  theme_tufte() +
+  facet_wrap(vars(as.factor(year)),
+             ncol=2)
+                
+## hex graph
+install.packages("hexbin")
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_hex() +
+  theme_minimal()
+
+ggplot(data=mpg, 
+       aes(x=cty, y=hwy)) + 
+  geom_bin2d() +
+  theme_minimal()
+
+
+
 
 
 
